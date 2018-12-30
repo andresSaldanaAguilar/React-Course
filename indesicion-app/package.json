@@ -1,0 +1,12 @@
+{
+  "name": "indesicion-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/andresSaldanaAguilar/React-Course",
+  "author": "Andres Saldana",
+  "license": "MIT",
+  "dependencies": {
+    "babel-preset-env": "1.5.2",
+    "babel-preset-react": "6.24.1"
+  }
+}
