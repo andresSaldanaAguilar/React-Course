@@ -1,67 +1,27 @@
-"use strict";
+'use strict';
 
-console.log("app.js is currently running");
+var square = function square(x) {
+    return x * x;
+};
+console.log(square(4));
 
-//JSX
-var header = {
-    title: "Indesicion App",
-    subtitle: "Testing some JSX features"
+/*const squareArrow = (x) => {
+    return x*x;
+};*/
+
+//the same of above, just valid when is just one line
+var squareArrow = function squareArrow(x) {
+    return x * x;
 };
 
-var array = ["one", "two", "three"];
+console.log(squareArrow(6));
 
-var template = React.createElement(
-    "div",
-    null,
-    React.createElement(
-        "h1",
-        null,
-        header.title
-    ),
-    React.createElement(
-        "p",
-        null,
-        header.subtitle
-    )
-);
-
-var userName = "Andrés Saldana";
-var userAge = 21;
-var userLocation = "Mexico City";
-
-var user = {
-    name: "Andres Saldana",
-    age: 21,
-    location: "Mexico City"
-};
-
-function getLocation(location) {
-    if (location) {
-        return React.createElement(
-            "p",
-            null,
-            "location"
-        );
-    }
+function getFisrtName(name) {
+    return name.split(' ')[0];
 }
 
-var templateTwo = React.createElement(
-    "div",
-    null,
-    React.createElement(
-        "h1",
-        null,
-        user.name
-    ),
-    React.createElement(
-        "p",
-        null,
-        "Age: ",
-        user.age
-    ),
-    getLocation(location)
-);
+var getFisrtNameArrow = function getFisrtNameArrow(name) {
+    return name.split(' ')[0];
+};
 
-var appRoot = document.getElementById('app');
-//what to render, where to render 
-ReactDOM.render(templateTwo, appRoot);
+console.log(getFisrtNameArrow('Andres Saldana'));

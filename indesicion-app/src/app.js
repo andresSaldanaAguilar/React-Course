@@ -1,44 +1,40 @@
 console.log("app.js is currently running");
 
 //JSX
-var header = {
+const header = {
     title: "Indesicion App",
-    subtitle: "Testing some JSX features"
+    subtitle: "Testing some JSX features",
+    options: ["One","Two"]
 };
 
-var array = ["one","two","three"];
-
-var template = (
+const template = (
     <div>
         <h1>{header.title}</h1>   
-        <p>{header.subtitle}</p>
+        {header.subtitle && <p>{header.subtitle}</p>}
+        {header.options && header.options.length > 0 ? <p>Here are your options</p> : <p>No options</p>}
     </div>
 );
 
-var userName = "Andrés Saldana";
-var userAge = 21;
-var userLocation = "Mexico City";
-
-var user = {
+const user = {
     name: "Andres Saldana",
-    age: 21,
+    age: 18,
     location: "Mexico City"
 };
 
 function getLocation(location){
     if(location){
-        return <p>location</p>;
+        return <p>Location: {location}</p>;
     }
 }
 
-var templateTwo = (
+const templateTwo = (
     <div>
-        <h1>{user.name}</h1>   
-        <p>Age: {user.age}</p>
-        {getLocation(location)}
+        <h1>{user.name ? user.name : "Anonymous"}</h1>   
+        {(user.age && user.age >= 18) && <p>Age: {user.age}</p>}
+        {getLocation(user.location)}
     </div>
 );
 
-var appRoot = document.getElementById('app');
+const appRoot = document.getElementById('app');
 //what to render, where to render 
-ReactDOM.render(templateTwo,appRoot);
+ReactDOM.render(template,appRoot);
