@@ -50,7 +50,7 @@ class Options extends React.Component {
         return (
             <div>
                 <button onClick={this.handleRemoveAll}>Remove All</button>
-                {this.props.options.map((option) =>  <Option key={option} option={option}/>)}
+                {this.props.options.map((option) =>  <Option key={option} optionText={option}/>)}
             </div>
         );
     }
@@ -81,10 +81,10 @@ class Option extends React.Component {
     render(){
         return (
             <div>
-                {this.props.option}
+                Option: {this.props.optionText}
             </div>
         );
     }
-}
+} 
 
 ReactDOM.render(<IndesicionApp />,document.getElementById('app'));
