@@ -19,8 +19,9 @@ var IndesicionApp = function (_React$Component) {
         _this.handleDeleteOptions = _this.handleDeleteOptions.bind(_this);
         _this.onMakeDesicion = _this.onMakeDesicion.bind(_this);
         _this.handleAddOption = _this.handleAddOption.bind(_this);
+        _this.handleAddOption = _this.handleAddOption.bind(_this);
         _this.state = {
-            options: []
+            options: props.options
         };
         return _this;
     }
@@ -28,11 +29,21 @@ var IndesicionApp = function (_React$Component) {
     _createClass(IndesicionApp, [{
         key: 'handleDeleteOptions',
         value: function handleDeleteOptions() {
-            this.setState(function () {
+            /*this.setState(() => {
                 return {
-                    options: []
+                    options: [] 
                 };
+            });*/
+
+            //shorthand syntax
+            this.setState(function () {
+                return { options: [] };
             });
+        }
+    }, {
+        key: 'handleDeleteOption',
+        value: function handleDeleteOption(option) {
+            console.log("hdo");
         }
     }, {
         key: 'onMakeDesicion',
@@ -50,9 +61,9 @@ var IndesicionApp = function (_React$Component) {
                 return 'Error: Duplicate entry';
             }
             this.setState(function (prevState) {
-                //but we don't want to manipulate the old array
-                //prevState.options.push(option); 
                 return {
+                    //but we don't want to manipulate the old array
+                    //prevState.options.push(option); 
                     //concat merges two arrays
                     options: prevState.options.concat(option)
                 };
@@ -61,18 +72,18 @@ var IndesicionApp = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var title = 'Indesicion App';
             var subtitle = 'Put your desicions on hands of a computer';
 
             return React.createElement(
                 'div',
                 null,
-                React.createElement(Header, { title: title, subtitle: subtitle }),
+                React.createElement(Header, { subtitle: subtitle }),
                 React.createElement(Action, {
                     hasOptions: this.state.options.length > 0,
                     onMakeDesicion: this.onMakeDesicion
                 }),
                 React.createElement(Options, {
+                    handleDeleteOption: this.handleAddOption,
                     options: this.state.options,
                     handleDeleteOptions: this.handleDeleteOptions
                 }),
@@ -86,6 +97,10 @@ var IndesicionApp = function (_React$Component) {
     return IndesicionApp;
 }(React.Component);
 
+IndesicionApp.defaultProps = {
+    options: []
+};
+
 var Header = function Header(props) {
     return React.createElement(
         'div',
@@ -95,12 +110,17 @@ var Header = function Header(props) {
             null,
             props.title
         ),
-        React.createElement(
+        props.subtitle && React.createElement(
             'h2',
             null,
             props.subtitle
         )
     );
+};
+
+//This allows to have some default values for components when an attribute is undefined
+Header.defaultProps = {
+    title: 'Indesicion App'
 };
 
 //stateless component
@@ -119,7 +139,7 @@ var Action = function Action(props) {
     );
 };
 
-/*
+/* Action Based Component
 class Action extends React.Component {
     render(){
         return (
@@ -146,7 +166,11 @@ var Options = function Options(props) {
             'Remove All'
         ),
         props.options.map(function (option) {
-            return React.createElement(Option, { key: option, optionText: option });
+            return React.createElement(Option, {
+                key: option,
+                optionText: option,
+                handleDeleteOption: props.handleAddOption
+            });
         })
     );
 };
@@ -175,11 +199,9 @@ var AddOption = function (_React$Component2) {
             e.preventDefault();
             //trim prevents the page submit on only empty spaces
             var option = e.target.elements.option.value.trim();
-            var retval = this.props.handleAddOption(option);
+            var error = this.props.handleAddOption(option);
             this.setState(function () {
-                return {
-                    error: retval
-                };
+                return { error: error };
             });
         }
     }, {
@@ -214,9 +236,14 @@ var Option = function Option(props) {
     return React.createElement(
         'div',
         null,
-        'Option: ',
-        props.optionText
+        props.optionText,
+        React.createElement(
+            'button',
+            { onClick: props.handleDeleteOption(props.optionText) },
+            'Remove'
+        )
     );
 };
 
-ReactDOM.render(React.createElement(IndesicionApp, null), document.getElementById('app'));
+//here we set the value for de app
+ReactDOM.render(React.createElement(IndesicionApp, { options: ['Second Street', 'Times Square'] }), document.getElementById('app'));

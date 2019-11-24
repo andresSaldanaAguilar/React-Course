@@ -4,17 +4,25 @@ class IndesicionApp extends React.Component {
         this.handleDeleteOptions = this.handleDeleteOptions.bind(this);
         this.onMakeDesicion = this.onMakeDesicion.bind(this);
         this.handleAddOption = this.handleAddOption.bind(this);
+        this.handleAddOption = this.handleAddOption.bind(this);
         this.state = {
-            options : []
+            options : props.options
         };
     }
 
     handleDeleteOptions(){
-        this.setState(() => {
+        /*this.setState(() => {
             return {
                 options: [] 
             };
-        });
+        });*/
+
+        //shorthand syntax
+        this.setState(() => ({ options: [] }));
+    }
+
+    handleDeleteOption(option){
+        console.log("hdo");
     }
 
     onMakeDesicion (){
@@ -30,28 +38,26 @@ class IndesicionApp extends React.Component {
         else if(this.state.options.includes(option)){
             return 'Error: Duplicate entry';
         }
-        this.setState((prevState) => {
+        this.setState((prevState) => ({
             //but we don't want to manipulate the old array
             //prevState.options.push(option); 
-            return {
                 //concat merges two arrays
                 options: prevState.options.concat(option)
-            };
-        });
+        }));
     }
 
     render(){
-        const title = 'Indesicion App';
         const subtitle = 'Put your desicions on hands of a computer';
 
         return (
             <div>
-                <Header title={title} subtitle={subtitle}/>
+                <Header subtitle={subtitle}/>
                 <Action 
                     hasOptions={this.state.options.length > 0}
                     onMakeDesicion={this.onMakeDesicion}
                 />
                 <Options 
+                    handleDeleteOption={this.handleAddOption}
                     options={this.state.options}
                     handleDeleteOptions={this.handleDeleteOptions}
                 />
@@ -63,14 +69,23 @@ class IndesicionApp extends React.Component {
     }
 }
 
+IndesicionApp.defaultProps = {
+    options: []
+};
+
 const Header = (props) => {
     return (
         <div>
             <h1>{props.title}</h1>
-            <h2>{props.subtitle}</h2>
+            {props.subtitle && <h2>{props.subtitle}</h2>}
         </div>
     );
 }
+
+//This allows to have some default values for components when an attribute is undefined
+Header.defaultProps = {
+    title: 'Indesicion App'
+};
 
 //stateless component
 const Action =(props) => {
@@ -86,7 +101,7 @@ const Action =(props) => {
     );
 };
 
-/*
+/* Action Based Component
 class Action extends React.Component {
     render(){
         return (
@@ -107,7 +122,13 @@ const Options = (props) => {
         return (
             <div>
                 <button onClick={props.handleDeleteOptions}>Remove All</button>
-                {props.options.map((option) =>  <Option key={option} optionText={option}/>)}
+                {props.options.map((option) => (
+                    <Option 
+                        key={option} 
+                        optionText={option}
+                        handleDeleteOption={props.handleAddOption}
+                    />
+                ))}
             </div>
         );
 }
@@ -126,12 +147,8 @@ class AddOption extends React.Component {
         e.preventDefault();
         //trim prevents the page submit on only empty spaces
         const option = e.target.elements.option.value.trim();
-        const retval = this.props.handleAddOption(option);
-        this.setState(()=>{
-            return {
-                error: retval
-            };
-        });
+        const error = this.props.handleAddOption(option);
+        this.setState(()=> ({ error }));
     }
     render(){
         return (
@@ -149,9 +166,11 @@ class AddOption extends React.Component {
 const Option = (props) => {
         return (
             <div>
-                Option: {props.optionText}
+                {props.optionText}
+                <button onClick={props.handleDeleteOption(props.optionText)}>Remove</button>
             </div>
         );
 } 
 
-ReactDOM.render(<IndesicionApp />,document.getElementById('app'));
+//here we set the value for de app
+ReactDOM.render(<IndesicionApp options = {['Second Street','Times Square']}/>,document.getElementById('app'));
